@@ -38,17 +38,26 @@ console.log(weatherSelector.weatherinfo);
   }
 
 let details="";
-if(weatherSelector.weatherinfo){
+ 
+  
+  if (weatherSelector.weatherinfo && weatherSelector.weatherinfo.hasOwnProperty("location")){
+  //remove time from date json
+  var d = weatherSelector.weatherinfo.location.localtime;
+  d = d.split(' ')[0];
+
   details=<div className="details">
     <h4>Weather Details</h4>
     <p>{weatherSelector.weatherinfo.location.name}
     <span>
-        {weatherSelector.weatherinfo.location.country}
+       <br/>{weatherSelector.weatherinfo.location.country}
       </span></p>
+       <p>{d}</p>
+    <p>WIND {weatherSelector.weatherinfo.current.wind_speed}</p>
     <img src={sun} width="100" height="100"/>
+    <p> {weatherSelector.weatherinfo.current.temperature}°</p>
   </div>
 }else{
-  details=<p>You Need to type city</p>
+  details=<p>You Need to type city or the city you Typed not exist!!.... </p>
 }
 
 

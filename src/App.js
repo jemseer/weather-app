@@ -4,9 +4,7 @@ import sun from './sun.png';
 //action
 import { fetchWeather } from "./actions/fetchWeather";
 import './App.css';
-import Search from './components/Search';
-import Weather from './components/Weather';
-import Days from './components/Days';
+
 
 function App() {
   //set city
@@ -35,11 +33,7 @@ function App() {
 
 
   let details = "";
-  
 
-
-
-  
   if (weatherSelector.weatherinfo && weatherSelector.weatherinfo.hasOwnProperty("location")) {
     //remove time from date json
     var d = weatherSelector.weatherinfo.location.localtime;

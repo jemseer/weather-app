@@ -3,26 +3,23 @@ import { useSelector, useDispatch } from "react-redux";
 import sun from './sun.png';
 //action
 import { fetchWeather } from "./actions/fetchWeather";
-
 import './App.css';
 import Search from './components/Search';
 import Weather from './components/Weather';
 import Days from './components/Days';
 
-
-
 function App() {
   //set city
   const [city, setCity] = useState("");
-  const weatherSelector = useSelector((state )=> state)
-  const dispatch=useDispatch();
-  const getWeatherInfoAction=(city)=>dispatch
-  (fetchWeather(city));
+  const weatherSelector = useSelector((state) => state)
+  const dispatch = useDispatch();
+  const getWeatherInfoAction = (city) => dispatch
+    (fetchWeather(city));
 
 
-useEffect(() => {
- getWeatherInfoAction("india");
-}, {})
+  useEffect(() => {
+    getWeatherInfoAction("india");
+  }, {})
 
 
   const getWeatherInfo = (e) => {
@@ -32,58 +29,73 @@ useEffect(() => {
     }
     else {
       getWeatherInfoAction(city);
-console.log(weatherSelector.weatherinfo);
+      console.log(weatherSelector.weatherinfo);
     }
-
   }
 
-let details="";
- 
-  
-  if (weatherSelector.weatherinfo && weatherSelector.weatherinfo.hasOwnProperty("location")){
-  //remove time from date json
-  var d = weatherSelector.weatherinfo.location.localtime;
-  d = d.split(' ')[0];
 
-  details=<div className="details">
-    <h4>Weather Details</h4>
-    <p>{weatherSelector.weatherinfo.location.name}
-    <span>
-       <br/>{weatherSelector.weatherinfo.location.country}
-      </span></p>
-       <p>{d}</p>
-    <p>WIND {weatherSelector.weatherinfo.current.wind_speed}</p>
-    <img src={sun} width="100" height="100"/>
-    <p> {weatherSelector.weatherinfo.current.temperature}°</p>
-  </div>
-}else{
-  details=<p>You Need to type city or the city you Typed not exist!!.... </p>
-}
+  let details = "";
+  
 
 
 
   
+  if (weatherSelector.weatherinfo && weatherSelector.weatherinfo.hasOwnProperty("location")) {
+    //remove time from date json
+    var d = weatherSelector.weatherinfo.location.localtime;
+    d = d.split(' ')[0];
+
+    //get day from date
+
+    var weekdays = new Array(7);
+    weekdays[0] = "Sunday";
+    weekdays[1] = "Monday";
+    weekdays[2] = "Tuesday";
+    weekdays[3] = "Wednesday";
+    weekdays[4] = "Thursday";
+    weekdays[5] = "Friday";
+    weekdays[6] = "Saturday";
+
+    var current_date = new Date();
+
+    var weekday_value = current_date.getDay();
+
+    var day=weekdays[weekday_value]
+
+    details =
+      <div className="s-line">
+        <div className="colum-part">
+          <p className="place-b">{weatherSelector.weatherinfo.location.name}</p>
+        <p className="place-b">{day}</p>
+          
+          <p className="day-l">{d}</p>
+          <p className="wind-s">Wind {weatherSelector.weatherinfo.current.wind_speed}km/h</p>
+        <p className="wind-s"><i class="fas fa-tint"></i> {weatherSelector.weatherinfo.current.cloudcover}%</p>
+          
+        </div>
+        <div className="colum-part-2">
 
 
+          <img src={sun} alt="weather-cast-image" width="85px" height="75px" />&nbsp;&nbsp;
+        <span className="temp-font">{weatherSelector.weatherinfo.current.temperature}°</span>
+        </div>
+      </div>
+  }
+  else {
+    details = <p>You Need to type city or the city you Typed not exist!!.... </p>
+  }
   return (
     <React.Fragment>
-      <div className="container">
-        <form onSubmit={getWeatherInfo}>
-          <input type="text" name="name" placeholder="enter your city" onChange={e =>
-            setCity(e.target.value)} />
-          <input type="submit" value="Check Weather" />
-
-        </form>
-{details}
-
-        {/* <Search />
-        <Weather />
-        <Days /> */}
+      <div className="main">
+        <div className="search">
+          <form onSubmit={getWeatherInfo}>
+            <input type="text" placeholder="Type City" onChange={e =>
+              setCity(e.target.value)} /><input type="submit" value="Search" />
+          </form>
+        </div>
+        {details}
       </div>
     </React.Fragment>
-  
-
   );
 }
-
 export default App;
